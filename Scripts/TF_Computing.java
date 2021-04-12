@@ -17,7 +17,8 @@ public class TF_Computing {
 
 
         //this messy instruction does the processes of : StopWordRemoval,stemming,frequencyComputing..
-        HashMap<String,Integer> list_of_stems_with_frequencies=term_frequency_computing(Stemmer.stemming(StopWordRemover.stopWordRemove(list_of_tokens,list_of_stopwords), 5));
+        HashMap<String,Integer> list_of_stems_with_frequencies= new HashMap<String,Integer>();
+        //term_frequency_computing(Stemmer.stemming(StopWordRemover.stopWordRemove(list_of_tokens,list_of_stopwords), 5," _-.,;:!/'()[]"));
 
         for(String key : list_of_stems_with_frequencies.keySet()){
             System.out.println(key+"  "+list_of_stems_with_frequencies.get(key).toString());
@@ -48,7 +49,8 @@ public class TF_Computing {
 
     public static Double computing_TF(String term,Integer Doc_i){
         if(MyDictionary.getInstance().contains(term)){
-            return 1+Math.log(MyDictionary.getInstance().getIndex(term).getFrequency(Doc_i));
+            Double value=1+Math.log(MyDictionary.getInstance().getIndex(term).getFrequency(Doc_i));
+            return (value.equals(Double.NaN)?1:value);
         }
         return 0.0;
     }

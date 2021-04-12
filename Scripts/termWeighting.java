@@ -9,43 +9,26 @@ import java.util.HashMap;
 
 import java.util.Map;
 
-import Scripts.MyIndex;
-
-
 
 
 public class termWeighting {
 
 
-    //private static IndexMaker INDEX_MAKER = new IndexMakerV1();
-
-    //full Index structure
 
 
     public static void main(String[] argv) throws NullPointerException, IOException{
-        //index_collection("Corpus");
 
+        //  mapDirectory("Corpus", "Linguistics", 6," \"–0123456789_-.,;:!/'()[]%");
+        
+        // MyDictionary.getInstance().save_index_to_disk("lexicon", "Postlist","docProps");
 
-        // finding the time before the operation is executed
-        long start = System.currentTimeMillis();
-
-
-        mapEveryFileMap("myTestCorpus","Linguistics",6);
+        MyDictionary.getInstance().read_index_from_disk("lexicon", "postingList","docProps");
 
         MyDictionary.getInstance().displayContent();
-    
-
-        // finding the time after the operation is executed
-        long end = System.currentTimeMillis();
-        //finding the time difference and converting it into seconds
-        Float sec =  ((end - start) / 1000F); 
-        //System.out.println(sec + " seconds");
-
-        System.out.println("Weighting finished successfully after : "+(sec/60)+" minutes.");
-        //tested on 13/03/2021 at 17:24 , it gave 366.602 seconds. (for more than 200000 docs)
+        
     }
 
-    public static void mapEveryFileMap(String folderName,String linguisticsFolder,Integer stemParameter) throws NullPointerException, IOException{
+    private static void mapEveryFileMap(String folderName,String linguisticsFolder,Integer stemParameter,String delimiters) throws NullPointerException, IOException{
         //Map<Integer,Map<String,Integer>> myFolderMap = new HashMap<Integer,Map<String,Integer>>();
         File testDirectory = new File(folderName);
         ArrayList<String> list_of_stopwords = MyTokenizer.
@@ -56,29 +39,38 @@ public class termWeighting {
 
         //let's index every file..
         for(int i_Doc=0;i_Doc<filenames.length;i_Doc++ ){
+            Map<String,Integer> docStruct = new HashMap<String,Integer> ();
+
+
             String currentFile=filenames[i_Doc];
             //System.out.println(currentFile);
             ArrayList<String> list_of_tokens = MyTokenizer.
                 tokenizeFileContent(folderName+"/"+currentFile
-                 ," \"–0123456789_-.,;:!/'()[]");
+                 ,delimiters);
 
 
+            ArrayList<String> lister = StopWordRemover.stopWordRemove(list_of_tokens, list_of_stopwords);
+            Stemmer.stemming(lister,6,i_Doc);
 
-            Stemmer.stemming(StopWordRemover.stopWordRemove(list_of_tokens, list_of_stopwords),6,i_Doc);
-
-            
+            docStruct.put(testDirectory+"/"+filenames[i_Doc],lister.size());
+            MyDictionary.getInstance().addFileToIndex((Integer)i_Doc,docStruct);
+            //System.out.println(docStruct);
         }
 
-
-        //myFolderMap
-        //return ;
-        
     }
 
-    @Deprecated //I think..
-    public static HashMap<String,Double> index_collection(String folderName,String linguisticsFolder,Integer stemParameter) throws NullPointerException, IOException{
+    public static void mapDirectory(String directory,String LangDirectory,int trunc,String delimiters) throws NullPointerException, IOException{
+        mapEveryFileMap(directory, LangDirectory,trunc,delimiters);
+        MyDictionary.getInstance().recapSubIndexes();//You must be asking why? well, I thought about making a "bottom up" approach for indexing the directory..
+
+    }
+
+
+    @Deprecated //Don't use this for it will return segfaults..
+    public static HashMap<String,Double> index_collection(String folderName,String linguisticsFolder,Integer stemParameter,String delimiters) throws NullPointerException, IOException{
         
-        Map<Integer,Map<String,Integer>> foldermap = mapEveryFileMap(folderName,linguisticsFolder,stemParameter);
+        Map<Integer,Map<String,Integer>> foldermap = new  HashMap<Integer,Map<String,Integer>>();
+        //foldermap used to be fed by mapEveryFileMap(folderName,linguisticsFolder,stemParameter,delimiters).. before it's return type has changed..
         
         HashMap<String,Double> indexCollection= new HashMap<String,Double>();
         
@@ -111,6 +103,41 @@ public class termWeighting {
         return indexCollection;
     }
 
+    public static Double DF_Computing(String token){
+        if (MyDictionary.getInstance().contains(token)) {
+            return Math.log(1+MyDictionary.getInstance().fileCount()/MyDictionary.getInstance().getIndex(token).getDocumentCount());
+            
+        }
+        else 
+            return 0.0;
+    }   
+
+    public static Double IDF_Computing(String token){
+        if (MyDictionary.getInstance().contains(token)) {
+            // System.out.println(MyDictionary.getInstance().fileCount());
+            // System.out.println(MyDictionary.getInstance().getIndex(token).getDocumentCount());
+            // System.out.println(Math.log((0.5-MyDictionary.getInstance().fileCount()
+            // +MyDictionary.getInstance().getIndex(token).getDocumentCount())
+            // /
+            // (MyDictionary.getInstance().fileCount()+0.5)));
+            // System.out.println();
+            // System.out.println();
+            // System.out.println();
+
+
+
+
+
+            Double value=Math.log((0.5-MyDictionary.getInstance().fileCount()
+            +MyDictionary.getInstance().getIndex(token).getDocumentCount())
+            /
+            (MyDictionary.getInstance().fileCount()+0.5));;
+            //System.out.println(value);
+            return (value.equals(Double.NaN)?1:value);
+        }
+        else
+            return 0.0;
+    }
 
 
     
