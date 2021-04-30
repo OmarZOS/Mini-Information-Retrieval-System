@@ -1,0 +1,81 @@
+
+**************************************************************************
+
+Evaluating S1_results
+
+q1-------------------------------------
+Recall value : 0.375
+Precision value : 0.42857142857142855
+F_measure value : 0.39999999999999997
+Precision_at_K value : 0.375
+Precision_at_R value : 0.42857142857142855
+
+q2-------------------------------------
+Recall value : 0.6363636363636364
+Precision value : 0.7
+F_measure value : 0.6666666666666666
+Precision_at_K value : 0.6363636363636364
+Precision_at_R value : 0.3
+
+q3-------------------------------------
+Recall value : 0.3333333333333333
+Precision value : 0.4166666666666667
+F_measure value : 0.3703703703703704
+Precision_at_K value : 0.3333333333333333
+Precision_at_R value : 0.08333333333333333
+
+****** Map measure value 0.3046656429989763
+
+**************************************************************************
+
+Evaluating S2_results
+
+q1-------------------------------------
+Recall value : 0.2222222222222222
+Precision value : 0.2857142857142857
+F_measure value : 0.25
+Precision_at_K value : 0.2222222222222222
+Precision_at_R value : 0.2857142857142857
+
+q2-------------------------------------
+Recall value : 0.6923076923076923
+Precision value : 0.9
+F_measure value : 0.7826086956521738
+Precision_at_K value : 0.6923076923076923
+Precision_at_R value : 0.4
+
+q3-------------------------------------
+Recall value : 0.5333333333333333
+Precision value : 0.6666666666666666
+F_measure value : 0.5925925925925926
+Precision_at_K value : 0.5333333333333333
+Precision_at_R value : 0.4166666666666667
+
+****** Map measure value 0.4999328449328449
+
+**************************************************************************
+
+Evaluating S3_results
+
+q1-------------------------------------
+Recall value : 0.8333333333333334
+Precision value : 0.7142857142857143
+F_measure value : 0.7692307692307692
+Precision_at_K value : 0.8333333333333334
+Precision_at_R value : 0.5714285714285714
+
+q2-------------------------------------
+Recall value : 0.5384615384615384
+Precision value : 0.7
+F_measure value : 0.608695652173913
+Precision_at_K value : 0.5384615384615384
+Precision_at_R value : 0.4
+
+q3-------------------------------------
+Recall value : 0.4
+Precision value : 0.5
+F_measure value : 0.4444444444444445
+Precision_at_K value : 0.4
+Precision_at_R value : 0.08333333333333333
+
+****** Map measure value 0.47343813593813594
